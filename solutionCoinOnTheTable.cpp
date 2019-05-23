@@ -42,13 +42,13 @@ int coinOnTheTable(int m_, int k, vector<string> board) {
 					int nstep1 = nstep0 + 1;
 
 					if (0 < i && board[i][j] == 'U' && nsts[i - 1][j][o] > nstep1)
-						nsts[--i][j][o] = (nstep1);
+						nsts[--i][j][o] = nstep1;
 					else if (i < m - 1 && board[i][j] == 'D' && nsts[i + 1][j][o] > nstep1)
-						nsts[++i][j][o] = (nstep1);
+						nsts[++i][j][o] = nstep1;
 					else if (0 < j && board[i][j] == 'L' && nsts[i][j - 1][o] > nstep1)
-						nsts[i][--j][o] = (nstep1);
+						nsts[i][--j][o] = nstep1;
 					else if (j < n - 1 && board[i][j] == 'R' && nsts[i][j + 1][o] > nstep1)
-						nsts[i][++j][o] = (nstep1);
+						nsts[i][++j][o] = nstep1;
 					else
 						break;
 				}
