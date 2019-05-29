@@ -12,41 +12,19 @@ using namespace std;
 
 vector<string> split_string(string);
 
-/*
- * Complete the legoBlocks function below.
- */
-int legoBlocks(int height, int width) {
-	int mod = 1000000007;
-	int ncs[width + 1];
-	int ncu[width + 1];
-	int nca[width + 1];
-	ncs[0] = 1;
-	nca[0] = 1;
-	for (int l = 1; l <= width; l++) {
-		int count = 0;
-		count = 1 <= l ? (count + ncs[l - 1]) % mod : count;
-		count = 2 <= l ? (count + ncs[l - 2]) % mod : count;
-		count = 3 <= l ? (count + ncs[l - 3]) % mod : count;
-		count = 4 <= l ? (count + ncs[l - 4]) % mod : count;
-		int prod = 1;
-		for (int g = 65536; 0 < g; g /= 2) {
-			prod = (prod * (long) prod) % mod;
-			if ((height & g) != 0) {
-				prod = (prod * (long) count) % mod;
-			}
-		}
-		ncs[l] = count;
-		nca[l] = prod;
+// Complete the cost function below.
+int cost(vector<int> bs) {
+	int sum1 = 0, sumx = 0;
+	int v1 = 1, vx = bs[0];
+	for (int i = 1; i < bs.size(); i++) {
+		int b = bs[i];
+		int sum1_ = max(sum1 + abs(1 - v1), sumx + abs(1 - vx));
+		int sumx_ = max(sum1 + abs(b - v1), sumx + abs(b - vx));
+		sum1 = sum1_;
+		sumx = sumx_;
+		vx = b;
 	}
-	for (int l = 0; l <= width; l++) {
-		int combos = nca[l];
-		for (int sep = 1; sep < l; sep++) {
-			combos = combos - ((ncu[sep] * (long) nca[l - sep]) % mod);
-			combos = (mod + combos) % mod;
-		}
-		ncu[l] = combos;
-	}
-	return ncu[width];
+	return max(sum1, sumx);
 }
 
 int main() {
@@ -57,16 +35,24 @@ int main() {
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	for (int t_itr = 0; t_itr < t; t_itr++) {
-		string nm_temp;
-		getline(cin, nm_temp);
+		int n;
+		cin >> n;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		vector<string> nm = split_string(nm_temp);
+		string B_temp_temp;
+		getline(cin, B_temp_temp);
 
-		int n = stoi(nm[0]);
+		vector<string> B_temp = split_string(B_temp_temp);
 
-		int m = stoi(nm[1]);
+		vector<int> B(n);
 
-		int result = legoBlocks(n, m);
+		for (int i = 0; i < n; i++) {
+			int B_item = stoi(B_temp[i]);
+
+			B[i] = B_item;
+		}
+
+		int result = cost(B);
 
 		fout << result << "\n";
 	}
